@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pescador</title>
+    <style>
+      /*aqui estamos adicionando background image */
+      body {
+        background-image: url(imgs/fishing.png);
+        background-size: 2000px 1000px;
+        background-repeat: no-repeat;
+      }
+      /*aqui estamos adicionando a imagem do Fish */
+      img {
+        position: absolute;
+        height: 100px;
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="fishes"></div>
+    <button id="new">New Fish</button>
+    <button id="remove">Remove Fish</button>
+    <script>
+      //aqui temos a classe Fish
+      class Fish {
+        //aqui temos o construtor da classe
+        constructor() {
+          this.x = window.innerWidth;
+          this.y = 0;
+          this.velocidadeX = -(Math.random() * 4 + 1);
+          this.baseY = Math.random() * 200 + 600;
+          this.el = document.createElement("img");
+          this.el.src = "imgs/fish.gif";
+          this.el.alt = "Fish";
+          document.querySelector("#fishes").appendChild(this.el);
+        }
+        //aqui temos a funcao que ira movimentar a tela
+        movimentar() {
+          this.x += this.velocidadeX;
+          this.y = this.baseY + Math.cos(this.x / 30) * 15;
+
+          if (this.x <= 0) {
+            this.x = window.innerWidth;
+            this.baseY = Math.random() * 200 + 600;
+          }
+
+          this.el.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        }
+      }
+
+      //aqui temos o vetor de peixes
+      let fishes = [new Fish(), new Fish(), new Fish()];
+
+      //aqui temos uma funcao timing event
+      setInterval(() => {
+        for (let i = 0; i < fishes.length; i++) {
+          fishes[i].movimentar();
+        }
+      }, 33);
+
+      //aqui estamos criando um elemento html
+      let novoEl = document.querySelector("#new");
+      let removeEl = document.querySelector("#remove");
+
+      //aqui estamos add funcionalidade ao botao criado
+      novoEl.addEventListener("click", () => {
+        fishes.push(new Fish());
+      });
+
+      //aqui estamos removendo, mas com alguns bugs
+      removeEl.addEventListener("click", () => {
+        random = Math.floor(Math.random() * (fishes.length - 0)) + 0;
+        fishes[random].el.remove();
+        fishes.splice(random, 1);
+      });
+    </script>
+  </body>
+</html>
